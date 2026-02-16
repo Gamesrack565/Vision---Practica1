@@ -1,5 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication
+from Vista.vista import VistaPrincipal
 from Controlador.Controlador import Controlador
 
 # --- Arranque de la aplicación ---
