@@ -39,4 +39,4 @@ class Modelo:
         if distancia_min < umbrall:
             return f"El vector pertenece a la clase {indice_ganador}"
         else:
-            return "No pertence a ningún vector, es huérfano."
+            return "No pertence a ninguna clase, es huérfano."
