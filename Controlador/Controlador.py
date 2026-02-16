@@ -9,9 +9,6 @@ class Controlador:
     def __init__(self):
         self.modelo = Modelo()
         self.vista = VistaPrincipal()
-
-        # Esto es un truco de conexión: le decimos a la vista que, cuando tenga 
-        # las coordenadas listas, llame a nuestra función 'procesar_datos' de aquí abajo.
         self.vista.funcion_procesar = self.procesar_datos
 
     def procesar_datos(self, x_str, y_str):
