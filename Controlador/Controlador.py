@@ -1,34 +1,27 @@
-   def programa_principal():
-    #Calcular centro de gravedad de cada cluster
-    u1 = centro_gravedad(C1)
-    u2 = centro_gravedad(C2)
+import sys
+import numpy as np
+from PyQt6.QtWidgets import QApplication, QMessageBox
 
-    #CAMBIAR PARA QUE EL USUARIO INGRESE LOS PUNTOS A CLASIFICAR
-    X1 = np.array([5, 1])
+from Modelo.modelo import Modelo
+from Vista.vista import VistaPrincipal
 
-    #Calcular distancia de cada punto al centro de gravedad
-    d1 = calcular_distancia(X1, u1)
-    d2 = calcular_distancia(X1, u2)
-    
-    umbrall = 4
+class Controlador:
+    def __init__(self):
+        self.modelo = Modelo()
+        self.vista = VistaPrincipal()
 
-    if d1 < d2:
-        if d1 < umbrall:
-            print("El punto pertenece al Cluster 1")
-        else:            
-            print("Es huerfano, no pertenece a ningun cluster")
+        # Esto es un truco de conexión: le decimos a la vista que, cuando tenga 
+        # las coordenadas listas, llame a nuestra función 'procesar_datos' de aquí abajo.
+        self.vista.funcion_procesar = self.procesar_datos
 
-    elif d2 < d1:
-        if d2 < umbrall:
-            print("El punto pertenece al Cluster 2")
-        else:            
-            print("Es huerfano, no pertenece a ningun cluster")
-    
-    else: #d1 == d2
-        print("El punto esta equidistante a ambos clusters, no se puede clasificar")
+    def procesar_datos(self, x_str, y_str):
+        #Convierte x_str y y_str a números decimales (float).
+        x_num = float(x_str)
+        y_num = float(y_str)
+        
+        #VEctor dado por el usuario
+        vector_nuevo = np.array([x_num, y_num]) 
 
-    print("Centro de gravedad del Cluster 1:", u1)
-    print("Centro de gravedad del Cluster 2:", u2)
-    print("Distancias del Cluster 1 al centro de gravedad:", d1)
-    print("Distancias del Cluster 2 al centro de gravedad:", d2)
+        resultado = self.modelo.clasificar(vector_nuevo, 4.0)
 
+        QMessageBox.information(self.vista, "Resultado de Clasificación", resultado)
