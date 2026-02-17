@@ -10,45 +10,51 @@ from matplotlib.figure import Figure
 
 class VistaPrincipal(QMainWindow):
     def __init__(self):
+
+        # Inicializa la clase padre QMainWindow
         super().__init__()
         
+        """
+        Establece el titulo de la ventana y su tamaño.
+        Aplica un estilo CSS: fondo blanco y borde azul oscuro.
+        """
         self.setWindowTitle("Practica 1 - Clasificacion - CH")
         self.resize(1100, 768) 
         self.setStyleSheet("QMainWindow { background-color: white; border: 6px solid #000080; }")
 
-        # --- LAYOUT PRINCIPAL ---
+        # Crea el contenedor central y un layout horizontal. 
         widget_central = QWidget()
         layout_principal = QHBoxLayout()
         widget_central.setLayout(layout_principal)
         self.setCentralWidget(widget_central)
 
-        # =========================================================
-        # PANEL IZQUIERDO (Gráfica, Botón y Créditos)
-        # =========================================================
+        
+        # Crea un panel izquierdo con un layout vertical, ocupando 3 veces más espacio que el panel derecho.
         panel_izquierdo = QWidget()
         layout_izquierdo = QVBoxLayout()
         panel_izquierdo.setLayout(layout_izquierdo)
         layout_principal.addWidget(panel_izquierdo, stretch=3) 
 
-        # 1. Título
+        # 1. Título: Crea el titulo centrado y lo añade al panel izquierdo.
         self.titulo = QLabel("Primera práctica - Clasificación")
         self.titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.titulo.setStyleSheet("font-size: 28px; font-weight: bold; color: #000080; margin: 10px;")
         layout_izquierdo.addWidget(self.titulo)
 
-        # 2. Cuadro de la gráfica
+        # 2. Cuadro de la gráfica: Crea un marco para la gráfica.
         self.frame_grafica = QFrame()
         self.frame_grafica.setFrameShape(QFrame.Shape.Box)
         self.frame_grafica.setStyleSheet("background-color: white; border: 2px dashed #000080;")
         self.layout_grafica = QVBoxLayout()
         self.frame_grafica.setLayout(self.layout_grafica)
 
+        # Crea la figura de Matplotlib y el canvas. Aquí se dibujan los vectores, ocupando todo el espacio disponible.
         self.figura = Figure()
         self.canvas = FigureCanvas(self.figura)
         self.layout_grafica.addWidget(self.canvas)
         layout_izquierdo.addWidget(self.frame_grafica, stretch=1) 
 
-        # 3. Botón para ingresar nuevo vector
+        # 3. Botón para ingresar nuevo vector: Crea un botón que al hacer clic, se piden las coordenadas.
         self.btn_ingresar_vector = QPushButton("Ingresar Nuevo Vector")
         self.btn_ingresar_vector.setStyleSheet("""
             QPushButton { background-color: #000080; color: white; font-weight: bold; 
@@ -60,9 +66,7 @@ class VistaPrincipal(QMainWindow):
         self.btn_ingresar_vector.clicked.connect(self.pedir_coordenadas)
 
 
-        # =========================================================
-        # PANEL DERECHO (Historial Blanco y Azul)
-        # =========================================================
+        # Crea el panel derecho con un layout vertical.
         panel_derecho = QWidget()
         layout_derecho = QVBoxLayout()
         panel_derecho.setLayout(layout_derecho)
@@ -90,7 +94,7 @@ class VistaPrincipal(QMainWindow):
         """)
         layout_derecho.addWidget(self.lista_historial)
 
-        # 3. Botón para mostrar (Ahora en Azul)
+        # 3. Botón para mostrar el vector seleccionado en la gráfica.
         self.btn_mostrar_seleccion = QPushButton("Mostrar en Gráfica")
         self.btn_mostrar_seleccion.setStyleSheet("""
             QPushButton { background-color: #000080; color: white; font-weight: bold; 
@@ -99,14 +103,16 @@ class VistaPrincipal(QMainWindow):
         """)
         layout_derecho.addWidget(self.btn_mostrar_seleccion)
 
-        # 4. Créditos (Inferior Izquierda) - Espacio para nombres
+        # 4. Créditos 
         self.label_creditos = QLabel("Desarrollado por: \nCerón Samperio Lizeth Montserrat \nHiguera Pineda Angel Abraham ")
         self.label_creditos.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_creditos.setStyleSheet("color: #000080; font-size: 12px; font-weight: bold; margin-top: 10px;")
         layout_derecho.addWidget(self.label_creditos)
 
-    # --- FUNCIONES DE LA VISTA ---
-
+    
+    """
+    Limpia la gráfica anterior y crea un nuevo gráfico. Define 6 colores para cada clase.
+    """
     def dibujar_vectores(self, lista_vectores, punto_usuario=None):
         self.figura.clear()
         ax = self.figura.add_subplot(111)
@@ -118,10 +124,19 @@ class VistaPrincipal(QMainWindow):
         if punto_usuario is not None:
             ax.scatter(punto_usuario[0], punto_usuario[1], color='black', marker='X', s=150, label='X Usuario')
 
+        """
+        Si el usuario ingresó una coordenada, lo dibuja en negro con una X en grande. Añade una cuadrícula punteada y 
+        dibuja todo en el canvas.
+        """
         ax.grid(True, linestyle='--', alpha=0.6)
         ax.legend()
         self.canvas.draw() 
 
+    """
+    Abre un cuadro de diálogo pidiendo la coordenada X. 
+    Si X es válida, pide la coordenada Y.
+    Pasa las coordenadas a la función de procesamiento y conecta así la vista con el controlador.
+    """
     def pedir_coordenadas(self):
         x_str, ok_x = QInputDialog.getText(self, "Ingresar X", "Ingresa la coordenada X:")
         if ok_x and x_str:
