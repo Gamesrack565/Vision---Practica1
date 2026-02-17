@@ -1,4 +1,6 @@
-import sys
+#Ceron Samperio Lizeth Montserrat
+#Higuera Pineda Angel Abraham
+
 import numpy as np
 from PyQt6.QtWidgets import QMessageBox
 from Modelo.modelo import Modelo
@@ -8,38 +10,45 @@ class Controlador:
     def __init__(self):
         self.modelo = Modelo()
         self.vista = VistaPrincipal()
-        self.vista.funcion_procesar = self.procesar_datos
         
-        #Dibujar los puntos iniciales al abrir el programa ---
-        vectores_iniciales = [self.modelo.C1, self.modelo.C2, self.modelo.C3, 
+        self.vista.funcion_procesar = self.procesar_datos
+        self.vista.btn_mostrar_seleccion.clicked.connect(self.mostrar_seleccionado)
+        
+        self.historial_vectores = []
+
+        self.vectores_base = [self.modelo.C1, self.modelo.C2, self.modelo.C3, 
                               self.modelo.C4, self.modelo.C5, self.modelo.C6]
-        self.vista.dibujar_vectores(vectores_iniciales)
+        self.vista.dibujar_vectores(self.vectores_base)
 
     def procesar_datos(self, x_str, y_str):
-        try: # <--- AGREGAMOS ESTE TRY
-            # 1. Conversión de datos
+        try: 
             x_num = float(x_str)
             y_num = float(y_str)
 
-            # 2. Vector dado por el usuario
             vector_nuevo = np.array([x_num, y_num]) 
-
-            # 3. Clasificación
+            
+            #Clasificamos mandando el umbral fijo de 4.0
             resultado = self.modelo.clasificar(vector_nuevo, 4.0)
 
-            # 4. Preparar clusters para la gráfica
-            vectores = [self.modelo.C1, self.modelo.C2, self.modelo.C3, 
-                        self.modelo.C4, self.modelo.C5, self.modelo.C6]
+            self.historial_vectores.append(vector_nuevo)
             
-            # 5. Dibujar y mostrar resultado
-            self.vista.dibujar_vectores(vectores, vector_nuevo)
+            texto_lista = f"X: {x_num} | Y: {y_num} ➔ {resultado}"
+            self.vista.lista_historial.addItem(texto_lista)
+            
+            ultimo_indice = self.vista.lista_historial.count() - 1
+            self.vista.lista_historial.setCurrentRow(ultimo_indice)
+
+            self.vista.dibujar_vectores(self.vectores_base, vector_nuevo)
             QMessageBox.information(self.vista, "Resultado", resultado)
 
-            # 6. Preguntar si desea continuar
-            self.vista.preguntar_nuevo_vector()
-
-        except ValueError: # <--- AHORA SÍ ESTÁ ALINEADO CON EL TRY
-            # Este mensaje solo sale si float(x_str) o float(y_str) fallan
+        except ValueError: 
             QMessageBox.warning(self.vista, "Error", "Ingresa números válidos.")
 
+    def mostrar_seleccionado(self):
+        indice = self.vista.lista_historial.currentRow()
         
+        if indice >= 0:
+            vector_viejo = self.historial_vectores[indice]
+            self.vista.dibujar_vectores(self.vectores_base, vector_viejo)
+        else:
+            QMessageBox.warning(self.vista, "Aviso", "Primero selecciona un vector del historial.")

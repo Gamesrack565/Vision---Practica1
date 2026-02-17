@@ -1,3 +1,6 @@
+#Ceron Samperio Lizeth Montserrat
+#Higuera Pineda Angel Abraham
+
 import sys
 from PyQt6.QtWidgets import QApplication
 from Vista.vista import VistaPrincipal
