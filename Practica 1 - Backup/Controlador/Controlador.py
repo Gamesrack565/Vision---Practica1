@@ -35,8 +35,7 @@ class Controlador:
     """
     Recibe las coordenadas X e Y como cadenas.
     """
-    #MODIFICAR ESTE METODO PARA LA OPCION NUEVA DE MAHALANOBIS
-    def procesar_datos(self, x_str, y_str, metodo="euclidiana"):    #---- DEBE CAMABIARSE ---
+    def procesar_datos(self, x_str, y_str):
 
         #Captura errores en caso que el usuario no ingrese números válidos.
         try: 
@@ -48,7 +47,7 @@ class Controlador:
             vector_nuevo = np.array([x_num, y_num]) 
             
             #Pasa el vector nuevo al modelo para que se encargue de la clasificación.
-            resultado = self.modelo.clasificar(vector_nuevo, 4.0, metodo)
+            resultado = self.modelo.clasificar(vector_nuevo, 4.0)
 
             #Agrega el nuevo vector al historial.
             self.historial_vectores.append(vector_nuevo)
