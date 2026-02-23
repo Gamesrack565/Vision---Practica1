@@ -35,8 +35,7 @@ class Controlador:
     """
     Recibe las coordenadas X e Y como cadenas.
     """
-    #MODIFICAR ESTE METODO PARA LA OPCION NUEVA DE MAHALANOBIS
-    def procesar_datos(self, x_str, y_str, metodo="euclidiana"):    #---- DEBE CAMABIARSE ---
+    def procesar_datos(self, x_str, y_str, metodo="euclidiana"):  
 
         #Captura errores en caso que el usuario no ingrese números válidos.
         try: 
@@ -46,15 +45,17 @@ class Controlador:
 
             #Crea el nuevo vector con las coordenadas que ingresó el usuario.
             vector_nuevo = np.array([x_num, y_num]) 
+
+            umbral = 4.0 if metodo == "euclidiana" else 10.0
             
             #Pasa el vector nuevo al modelo para que se encargue de la clasificación.
-            resultado = self.modelo.clasificar(vector_nuevo, 4.0, metodo)
+            resultado = self.modelo.clasificar(vector_nuevo, umbral, metodo)
 
             #Agrega el nuevo vector al historial.
             self.historial_vectores.append(vector_nuevo)
             
             #Formato del texto que se muestra en el historial.
-            texto_lista = f"X: {x_num} | Y: {y_num} ➔ {resultado}"
+            texto_lista = f"[{metodo.capitalize()}] X: {x_num} | Y: {y_num} ➔ {resultado}"
             self.vista.lista_historial.addItem(texto_lista)
             
             #Se selecciona de forma automática el último vector en la lista (el último en ser agregado)

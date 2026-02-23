@@ -3,7 +3,7 @@
 
 import sys
 from PyQt6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-                             QLabel, QPushButton, QFrame, QMessageBox, QInputDialog, QListWidget)
+                             QLabel, QPushButton, QFrame, QMessageBox, QInputDialog, QListWidget, QComboBox)
 from PyQt6.QtCore import Qt
 from matplotlib.backends.backend_qtagg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
@@ -92,6 +92,20 @@ class VistaPrincipal(QMainWindow):
         """)
         layout_derecho.addWidget(self.lista_historial)
 
+        self.label_metodo = QLabel("Seleccione el método para calculo de la distancia:")
+        self.label_metodo.setStyleSheet("font-weight: bold; color #000080; margin-top: 10px;")
+        layout_izquierdo.addWidget(self.label_metodo)
+
+        self.combo_metodo = QComboBox()
+        self.combo_metodo.addItems(["Euclidiana", "Mahalanobis"])
+        self.combo_metodo.setStyleSheet("""
+            QComboBox {
+                padding: 10px;
+                border: 2px solid #000080;
+                border-radius: 5px;
+                font-size: 14px;}""")
+        layout_izquierdo.addWidget(self.combo_metodo)
+
         #3. Botón para mostrar el vector seleccionado en la gráfica.
         self.btn_mostrar_seleccion = QPushButton("Mostrar en Gráfica")
         self.btn_mostrar_seleccion.setStyleSheet("""
@@ -143,4 +157,5 @@ class VistaPrincipal(QMainWindow):
             y_str, ok_y = QInputDialog.getText(self, "Ingresar Y", "Ingresa la coordenada Y:")
             if ok_y and y_str:
                 if hasattr(self, 'funcion_procesar'):
-                    self.funcion_procesar(x_str, y_str)
+                    metodo_sel = self.combo_metodo.currentText().lower()
+                    self.funcion_procesar(x_str, y_str, metodo_sel)

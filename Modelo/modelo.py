@@ -22,7 +22,6 @@ class Modelo:
         self.u6 = self.centro_gravedad(self.C6)
 
 
-        #NUEVO ----
         # Matrices de Covarianza Inversas pre-calculadas (Para Mahalanobis)
         self.inv_cov1 = self.calcular_covarianza_inversa(self.C1, self.u1)
         self.inv_cov2 = self.calcular_covarianza_inversa(self.C2, self.u2)
