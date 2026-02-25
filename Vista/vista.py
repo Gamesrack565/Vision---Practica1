@@ -12,131 +12,150 @@ class VistaPrincipal(QMainWindow):
     def __init__(self):
         super().__init__()
         
-        """
-        Establece el titulo de la ventana y su tamaño.
-        Aplica un estilo CSS: fondo blanco y borde azul oscuro.
-        """
         self.setWindowTitle("Practica 1 - Clasificacion - CH")
         self.resize(1100, 768) 
-        self.setStyleSheet("QMainWindow { background-color: white; border: 6px solid #000080; }")
 
-        #Crea el contenedor central y un layout horizontal. 
+        # --- LAYOUT PRINCIPAL ---
         widget_central = QWidget()
         layout_principal = QHBoxLayout()
         widget_central.setLayout(layout_principal)
         self.setCentralWidget(widget_central)
 
-        
-        #Crea un panel izquierdo con un layout vertical, ocupando 3 veces más espacio que el panel derecho.
+        # =========================================================
+        # PANEL IZQUIERDO (Gráfica y Controles)
+        # =========================================================
         panel_izquierdo = QWidget()
         layout_izquierdo = QVBoxLayout()
         panel_izquierdo.setLayout(layout_izquierdo)
         layout_principal.addWidget(panel_izquierdo, stretch=3) 
 
-        #1. Título: Crea el titulo centrado y lo añade al panel izquierdo.
+        # 1. Título
         self.titulo = QLabel("Primera práctica - Clasificación")
         self.titulo.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.titulo.setStyleSheet("font-size: 28px; font-weight: bold; color: #000080; margin: 10px;")
         layout_izquierdo.addWidget(self.titulo)
 
-        #2. Cuadro de la gráfica: Crea un marco para la gráfica.
+        # 2. Cuadro de la gráfica
         self.frame_grafica = QFrame()
         self.frame_grafica.setFrameShape(QFrame.Shape.Box)
-        self.frame_grafica.setStyleSheet("background-color: white; border: 2px dashed #000080;")
         self.layout_grafica = QVBoxLayout()
         self.frame_grafica.setLayout(self.layout_grafica)
 
-        #Crea la figura de Matplotlib y el canvas. Aquí se dibujan los vectores, ocupando todo el espacio disponible.
         self.figura = Figure()
         self.canvas = FigureCanvas(self.figura)
         self.layout_grafica.addWidget(self.canvas)
         layout_izquierdo.addWidget(self.frame_grafica, stretch=1) 
 
-        #3. Botón para ingresar nuevo vector: Crea un botón que al hacer clic, se piden las coordenadas.
-        self.btn_ingresar_vector = QPushButton("Ingresar Nuevo Vector")
-        self.btn_ingresar_vector.setStyleSheet("""
-            QPushButton { background-color: #000080; color: white; font-weight: bold; 
-                          font-size: 16px; padding: 15px; border-radius: 5px; border: none; }
-            QPushButton:hover { background-color: #1A237E; }
-        """)
-        layout_izquierdo.addWidget(self.btn_ingresar_vector)
+        # 3. Combobox para seleccionar método
+        self.label_metodo = QLabel("Seleccione el método para cálculo de la distancia:")
+        layout_izquierdo.addWidget(self.label_metodo)
 
+        self.combo_metodo = QComboBox()
+        self.combo_metodo.addItems(["Euclidiana", "Mahalanobis"])
+        layout_izquierdo.addWidget(self.combo_metodo)
+
+        # ¡NUEVO! Conectamos el cambio del combobox a nuestra función de temas
+        self.combo_metodo.currentTextChanged.connect(self.cambiar_tema_color)
+
+        # 4. Botón para ingresar nuevo vector
+        self.btn_ingresar_vector = QPushButton("Ingresar Nuevo Vector")
+        layout_izquierdo.addWidget(self.btn_ingresar_vector)
         self.btn_ingresar_vector.clicked.connect(self.pedir_coordenadas)
 
 
-        #Crea el panel derecho con un layout vertical.
+        # =========================================================
+        # PANEL DERECHO (Historial y Créditos)
+        # =========================================================
         panel_derecho = QWidget()
         layout_derecho = QVBoxLayout()
         panel_derecho.setLayout(layout_derecho)
         layout_principal.addWidget(panel_derecho, stretch=1) 
 
-        #1. Título del lado derecho usado para el historial de vectores
+        # 1. Título del historial
         self.titulo_historial = QLabel("Historial de Vectores")
         self.titulo_historial.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.titulo_historial.setStyleSheet("font-size: 18px; font-weight: bold; color: #000080; margin: 5px;")
         layout_derecho.addWidget(self.titulo_historial)
 
-        #2. Lista interactiva
+        # 2. Lista interactiva
         self.lista_historial = QListWidget()
-        self.lista_historial.setStyleSheet("""
-            QListWidget { 
-                background-color: white; 
-                color: #333333; 
-                border: 2px solid #000080; 
-                border-radius: 5px; 
-                font-size: 14px; 
-                padding: 5px; 
-            }
-            QListWidget::item { padding: 8px; border-bottom: 1px solid #eeeeee; }
-            QListWidget::item:selected { background-color: #000080; color: white; }
-        """)
         layout_derecho.addWidget(self.lista_historial)
 
-        self.label_metodo = QLabel("Seleccione el método para calculo de la distancia:")
-        self.label_metodo.setStyleSheet("font-weight: bold; color #000080; margin-top: 10px;")
-        layout_izquierdo.addWidget(self.label_metodo)
-
-        self.combo_metodo = QComboBox()
-        self.combo_metodo.addItems(["Euclidiana", "Mahalanobis"])
-        self.combo_metodo.setStyleSheet("""
-            QComboBox {
-                padding: 10px;
-                border: 2px solid #000080;
-                border-radius: 5px;
-                font-size: 14px;}""")
-        layout_izquierdo.addWidget(self.combo_metodo)
-
-        #3. Botón para mostrar el vector seleccionado en la gráfica.
+        # 3. Botón para mostrar el vector seleccionado
         self.btn_mostrar_seleccion = QPushButton("Mostrar en Gráfica")
-        self.btn_mostrar_seleccion.setStyleSheet("""
-            QPushButton { background-color: #000080; color: white; font-weight: bold; 
-                          font-size: 14px; padding: 12px; border-radius: 5px; border: none; }
-            QPushButton:hover { background-color: #1A237E; }
-        """)
         layout_derecho.addWidget(self.btn_mostrar_seleccion)
 
-        #4. Créditos 
+        # 4. Créditos 
         self.label_creditos = QLabel("Desarrollado por: \nCerón Samperio Lizeth Montserrat \nHiguera Pineda Angel Abraham ")
         self.label_creditos.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.label_creditos.setStyleSheet("color: #000080; font-size: 12px; font-weight: bold; margin-top: 10px;")
         layout_derecho.addWidget(self.label_creditos)
 
-    
-    """
-    Limpia la gráfica anterior y crea un nuevo gráfico. Define 6 colores para cada clase. y muestra su centro de gravedad
-    """
+        # ¡IMPORTANTE! Llamamos a esta función al iniciar para aplicar el color azul por defecto
+        self.aplicar_estilos("#000080", "#1A237E")
+
+    # --- FUNCIONES DE DISEÑO Y TEMAS ---
+
+    def cambiar_tema_color(self, metodo_seleccionado):
+        """Detecta qué método se eligió y cambia los colores de la interfaz."""
+        if metodo_seleccionado.lower() == "mahalanobis":
+            # Tema Rojo Oscuro (Mahalanobis)
+            self.aplicar_estilos(color_base="#8B0000", color_hover="#A52A2A")
+        else:
+            # Tema Azul Marino (Euclidiana)
+            self.aplicar_estilos(color_base="#000080", color_hover="#1A237E")
+
+    def aplicar_estilos(self, color_base, color_hover):
+        """Aplica las hojas de estilo CSS dinámicamente a todos los elementos usando f-strings."""
+        
+        self.setStyleSheet(f"QMainWindow {{ background-color: white; border: 6px solid {color_base}; }}")
+        
+        self.titulo.setStyleSheet(f"font-size: 28px; font-weight: bold; color: {color_base}; margin: 10px;")
+        
+        self.frame_grafica.setStyleSheet(f"background-color: white; border: 2px dashed {color_base};")
+        
+        self.label_metodo.setStyleSheet(f"font-weight: bold; color: {color_base}; margin-top: 10px;")
+        
+        self.combo_metodo.setStyleSheet(f"""
+            QComboBox {{ padding: 10px; border: 2px solid {color_base}; border-radius: 5px; font-size: 14px; }}
+        """)
+
+        estilo_btn_grande = f"""
+            QPushButton {{ background-color: {color_base}; color: white; font-weight: bold; 
+                          font-size: 16px; padding: 15px; border-radius: 5px; border: none; }}
+            QPushButton:hover {{ background-color: {color_hover}; }}
+        """
+        self.btn_ingresar_vector.setStyleSheet(estilo_btn_grande)
+
+        self.titulo_historial.setStyleSheet(f"font-size: 18px; font-weight: bold; color: {color_base}; margin: 5px;")
+        
+        self.lista_historial.setStyleSheet(f"""
+            QListWidget {{ 
+                background-color: white; color: #333333; border: 2px solid {color_base}; 
+                border-radius: 5px; font-size: 14px; padding: 5px; 
+            }}
+            QListWidget::item {{ padding: 8px; border-bottom: 1px solid #eeeeee; }}
+            QListWidget::item:selected {{ background-color: {color_base}; color: white; }}
+        """)
+        
+        estilo_btn_chico = f"""
+            QPushButton {{ background-color: {color_base}; color: white; font-weight: bold; 
+                          font-size: 14px; padding: 12px; border-radius: 5px; border: none; }}
+            QPushButton:hover {{ background-color: {color_hover}; }}
+        """
+        self.btn_mostrar_seleccion.setStyleSheet(estilo_btn_chico)
+        
+        self.label_creditos.setStyleSheet(f"color: {color_base}; font-size: 12px; font-weight: bold; margin-top: 10px;")
+
+
+    # --- FUNCIONES DE DIBUJO E INTERACCIÓN ---
+
     def dibujar_vectores(self, lista_vectores, lista_centros, punto_usuario=None):
         self.figura.clear()
         ax = self.figura.add_subplot(111)
         colores = ['red', 'blue', 'purple', 'cyan', 'orange', 'green']
 
         for i, vector in enumerate(lista_vectores):
-            #Extraemos las coordenadas X y Y directamente de la lista que nos pasó el Modelo
             cx = round(lista_centros[i][0], 2)
             cy = round(lista_centros[i][1], 2)
-            
             texto_leyenda = f"Clase {i+1} ({cx}, {cy})"
-            
             ax.scatter(vector[:, 0], vector[:, 1], color=colores[i], label=texto_leyenda) 
         
         if punto_usuario is not None:
@@ -146,11 +165,6 @@ class VistaPrincipal(QMainWindow):
         ax.legend(loc='best') 
         self.canvas.draw()
 
-    """
-    Abre un cuadro de diálogo pidiendo la coordenada X. 
-    Si X es válida, pide la coordenada Y.
-    Pasa las coordenadas a la función de procesamiento y conecta así la vista con el controlador.
-    """
     def pedir_coordenadas(self):
         x_str, ok_x = QInputDialog.getText(self, "Ingresar X", "Ingresa la coordenada X:")
         if ok_x and x_str:
