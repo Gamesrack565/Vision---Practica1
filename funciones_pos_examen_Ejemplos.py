@@ -133,3 +133,35 @@ def generar_letra_Z(num_representantes, offset_x, offset_y, dispersion):
     y_letra = np.concatenate([y_sup, y_diag, y_inf])
     
     return np.column_stack((x_letra, y_letra))
+
+
+
+
+
+
+
+#por si pide voltear una
+def _rotar_puntos(self, matriz_puntos, angulo_grados):
+        # Convierte los grados a radianes
+        theta = np.radians(angulo_grados)
+        c, s = np.cos(theta), np.sin(theta)
+        
+        # Define la matriz de rotación
+        R = np.array([[c, -s], [s, c]])
+        
+        # Encuentra el centro de la letra para que gire sobre su propio eje
+        centro = np.mean(matriz_puntos, axis=0)
+        
+        # Resta el centro, rota los puntos y suma el centro de nuevo
+        puntos_centrados = matriz_puntos - centro
+        puntos_rotados = np.dot(puntos_centrados, R.T)
+        
+        return puntos_rotados + centro
+
+    def _generar_letra_extra_volteada(self, offset_x, offset_y, ruido):
+        # Reutilizamos la función de la 'A' para hacer la letra extra
+        letra_base = self._generar_A(offset_x, offset_y, ruido)
+        
+        # La rotamos 180 grados (de cabeza). Puedes poner 90 o 270 si la quieres acostada.
+        letra_volteada = self._rotar_puntos(letra_base, angulo_grados=180)
+        return letra_volteada
