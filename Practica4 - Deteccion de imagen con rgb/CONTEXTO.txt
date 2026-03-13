@@ -1,0 +1,17 @@
+Proyecto: Clasificador de Píxeles por Color (Práctica 4) - Espacio RGB y Probabilidad
+Desarrolladores: Cerón Samperio Lizeth Montserrat, Higuera Pineda Angel Abraham
+
+Descripción Breve:
+Esta aplicación representa un avance significativo en el curso, pasando de clasificar puntos abstractos en un plano 2D a 
+clasificar píxeles reales de una imagen. El usuario carga una imagen (típicamente franjas de colores Negro, Rojo y Amarillo), 
+indica cuántas clases observa y genera una muestra aleatoria de píxeles ("representantes") dentro de zonas predefinidas.
+
+
+El corazón del programa ya no evalúa las coordenadas espaciales (X, Y), sino que extrae los valores de color tridimensionales (R, G, B) de esos píxeles. 
+Cuando el usuario ingresa una nueva coordenada a evaluar, el programa extrae su color y determina a qué franja pertenece utilizando tres métodos matemáticos:
+
+Distancia Euclidiana (en el espacio 3D de color).
+
+Distancia de Mahalanobis (en el espacio 3D de color, usando matrices de covarianza de 3x3).
+
+Probabilidad Gaussiana Multivariada (determina el porcentaje de pertenencia basado en la función de densidad de probabilidad).

@@ -1,0 +1,11 @@
+Esta aplicación es un clasificador interactivo de patrones que determina a cuál de las 6 clases predefinidas pertenece un nuevo vector (coordenada X, Y) 
+ingresado por el usuario. 
+La principal innovación de esta versión es que permite al usuario alternar entre dos métricas matemáticas para calcular la distancia:
+
+Distancia Euclidiana: Mide la distancia en línea recta, asumiendo que todas las clases tienen una dispersión circular y uniforme.
+
+Distancia de Mahalanobis: Una métrica avanzada que toma en cuenta la varianza y la correlación de los datos reales de cada clase (su "forma" y 
+dispersión en el espacio).
+
+Además, el programa incluye una función visual didáctica que permite dibujar las "fronteras de decisión" (barreras o umbrales) en tiempo real, 
+mostrando círculos perfectos para Euclidiana o elipses inclinadas para Mahalanobis, ayudando a comprender cómo "piensa" cada algoritmo.

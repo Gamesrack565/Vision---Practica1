@@ -1,0 +1,6 @@
+Su objetivo principal es clasificar un nuevo punto (vector 2D) ingresado por el usuario y 
+determinar a cuál de los 6 grupos o "clases" existentes pertenece.
+
+Para hacerlo, el programa calcula el "centro de gravedad" (promedio) de cada clase. Cuando el usuario ingresa un nuevo vector, 
+el programa mide la distancia euclidiana entre ese vector y los 6 centros. Si está lo suficientemente cerca de uno (dentro de un "umbral" de 4.0), 
+se asigna a esa clase; de lo contrario, se declara como un vector "huérfano". 

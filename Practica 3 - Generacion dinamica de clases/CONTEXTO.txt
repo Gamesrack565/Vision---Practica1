@@ -1,0 +1,16 @@
+Contexto para tu archivo .txt
+Proyecto: Generador Dinámico de Clases y Clasificador Probabilístico (Práctica 3)
+Desarrolladores: Cerón Samperio Lizeth Montserrat, Higuera Pineda Angel Abraham
+
+Descripción Breve:
+Esta aplicación es un clasificador de Machine Learning (vision) que da un salto de los datos estáticos a la generación dinámica de escenarios. 
+Permite al usuario crear "nubes de puntos" (clases sintéticas) especificando la cantidad, el centroide (X, Y) y la dispersión (varianza) de cada una.
+
+El núcleo del programa evalúa a qué clase pertenece un nuevo vector utilizando tres enfoques distintos:
+
+Euclidiana: Mide la distancia geométrica simple.
+
+Mahalanobis: Mide la distancia adaptándose a la forma y rotación de los datos.
+
+Probabilidad: Implementa la Función de Densidad de Probabilidad Gaussiana Multivariada para aplicar un enfoque bayesiano, 
+calculando qué porcentaje de probabilidad tiene el punto de pertenecer a la distribución de cada clase.

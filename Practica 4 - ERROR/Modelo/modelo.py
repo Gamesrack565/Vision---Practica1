@@ -179,24 +179,30 @@ class Modelo:
             dist_min = min(distancias)
             indice_ganador = distancias.index(dist_min)
             
-            # Un umbral de 150 unidades de color para decidir si es huérfano
-            if dist_min < 150:
+            # Un umbral de 60 unidades de color para decidir si es huérfano
+            if dist_min < 60:
                 return f"{self.nombres_clases[indice_ganador]} (Euc)"
             else:
                 return "Huérfano (No se parece a nada)"
                 
         elif metodo == "mahalanobis":
             distancias = [self.calcular_distancia_mahalanobis(color_rgb, c, ic) for c, ic in zip(self.centros_rgb, self.inv_covs)]
+            dist_min_cruda = min(distancias)
+            indice_ganador = distancias.index(dist_min_cruda)
+            
             suma_distancias = sum(distancias)
             dist_normalizada = [(d / suma_distancias) * 100 for d in distancias]
+            minimo_norm = dist_normalizada[indice_ganador]
             
-            minimo_norm = min(dist_normalizada)
-            indice_ganador = dist_normalizada.index(minimo_norm)
-            
-            return f"{self.nombres_clases[indice_ganador]} (Mah: {minimo_norm:.2f}%)"
+            # --- UMBRAL DE MAHALANOBIS ---
+            # Como se mide en "desviaciones estándar", un límite de 15 es estricto.
+            if dist_min_cruda < 15.0:
+                return f"{self.nombres_clases[indice_ganador]} (Mah: {minimo_norm:.2f}%)"
+            else:
+                return "Huérfano (No se parece a nada)"
                 
         elif "probabilidad" in metodo:
-            probabilidades = [self.calcular_probabilidad(color_rgb, c, ic, dc) for c, ic, dc, in zip(self.centros_rgb, self.inv_covs, self.det_covs)]
+            probabilidades = [self.calcular_probabilidad(color_rgb, c, ic, dc) for c, ic, dc in zip(self.centros_rgb, self.inv_covs, self.det_covs)]
             
             max_prob = max(probabilidades)
             indice_ganador = probabilidades.index(max_prob)
@@ -204,7 +210,9 @@ class Modelo:
             
             prob_norm = (max_prob / suma_probs) * 100 if suma_probs > 0 else 0.0
             
-            if max_prob > 1e-25: # Umbral de probabilidad extremadamente bajo para RGB
+            # --- UMBRAL DE PROBABILIDAD (BAYES) ---
+            # Si la densidad de probabilidad es extremadamente baja (fuera de la campana), lo rechazamos
+            if max_prob > 1e-15:
                 return f"{self.nombres_clases[indice_ganador]} (Prob: {prob_norm:.2f}%)"
             else:
                 return "Huérfano (Probabilidad casi nula)"
