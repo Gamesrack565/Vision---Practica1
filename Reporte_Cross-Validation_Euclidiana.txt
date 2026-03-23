@@ -1,0 +1,124 @@
+=== Cross-Validation | Euclidiana ===
+Rendimiento Global Promedio: 70.93%
+
+=== REGISTRO DE LAS 20 ITERACIONES ===
+
+ITERACIÓN 1:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              17          6           27          50        
+r              0           0           50          50        
+
+ITERACIÓN 2:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              13          9           28          50        
+r              0           0           50          50        
+
+ITERACIÓN 3:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              15          8           27          50        
+r              0           0           50          50        
+
+ITERACIÓN 4:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              15          7           28          50        
+r              0           0           50          50        
+
+ITERACIÓN 5:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              14          10          26          50        
+r              0           0           50          50        
+
+ITERACIÓN 6:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              16          5           29          50        
+r              0           0           50          50        
+
+ITERACIÓN 7:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              10          0           40          50        
+r              0           0           50          50        
+
+ITERACIÓN 8:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              20          4           26          50        
+r              0           0           50          50        
+
+ITERACIÓN 9:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              17          7           26          50        
+r              0           0           50          50        
+
+ITERACIÓN 10:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              13          8           29          50        
+r              0           0           50          50        
+
+ITERACIÓN 11:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              14          7           29          50        
+r              0           0           50          50        
+
+ITERACIÓN 12:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              16          8           26          50        
+r              0           0           50          50        
+
+ITERACIÓN 13:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              14          9           27          50        
+r              0           0           50          50        
+
+ITERACIÓN 14:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              16          6           28          50        
+r              0           0           50          50        
+
+ITERACIÓN 15:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              14          6           30          50        
+r              0           0           50          50        
+
+ITERACIÓN 16:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              16          9           25          50        
+r              0           0           50          50        
+
+ITERACIÓN 17:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              15          8           27          50        
+r              0           0           50          50        
+
+ITERACIÓN 18:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              15          7           28          50        
+r              0           0           50          50        
+
+ITERACIÓN 19:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              17          4           29          50        
+r              0           0           50          50        
+
+ITERACIÓN 20:
+               n           a           r           Suma      
+n              50          0           0           50        
+a              13          0           37          50        
+r              0           0           50          50        

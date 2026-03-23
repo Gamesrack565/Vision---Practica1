@@ -1,0 +1,44 @@
+=== REPORTE COMPLETO: Resustitución ===
+
+--- Métrica: Euclidiana (Resustitución) ---
+Rendimiento Global: 71.67%
+Rendimiento por Clase:
+  - n: 100.00%
+  - a: 15.00%
+  - r: 100.00%
+MATRIZ DE CONFUSIÓN:
+               n           a           r           Suma      
+n              100         0           0           100       
+a              30          15          55          100       
+r              0           0           100         100       
+
+==================================================
+
+--- Métrica: Mahalanobis (Resustitución) ---
+Rendimiento Global: 71.67%
+Rendimiento por Clase:
+  - n: 100.00%
+  - a: 15.00%
+  - r: 100.00%
+MATRIZ DE CONFUSIÓN:
+               n           a           r           Suma      
+n              100         0           0           100       
+a              30          15          55          100       
+r              0           0           100         100       
+
+==================================================
+
+--- Métrica: Probabilidad (Resustitución) ---
+Rendimiento Global: 71.67%
+Rendimiento por Clase:
+  - n: 100.00%
+  - a: 15.00%
+  - r: 100.00%
+MATRIZ DE CONFUSIÓN:
+               n           a           r           Suma      
+n              100         0           0           100       
+a              30          15          55          100       
+r              0           0           100         100       
+
+==================================================
+
