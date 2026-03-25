@@ -115,52 +115,68 @@ class DialogoResultadosCompletos(QDialog):
 class DialogoGraficaFinal(QDialog):
     def __init__(self, historial, nombres_clases, parent=None):
         super().__init__(parent)
-        self.setWindowTitle("Rendimiento por Clase y Rankings")
-        self.resize(1000, 600)
+        self.setWindowTitle("Rendimiento Global y Rankings")
+        self.resize(1100, 850)
         
         layout = QHBoxLayout()
         
+        # Panel izquierdo: 3 gráficas de barras (una por distancia)
         panel_grafica = QVBoxLayout()
-        fig = Figure()
+        fig = Figure(figsize=(7, 9))
         canv = FigureCanvas(fig)
-        ax = fig.add_subplot(111)
         
-        colores = {
-            "Euclidiana": ['#FF0000', '#8B0000', '#FFA07A'], 
-            "Mahalanobis": ['#0000FF', '#00008B', '#87CEFA'], 
-            "Probabilidad": ['#008000', '#006400', '#90EE90'] 
-        }
-        estilos = {"Resustitución": "-", "Leave-One-Out": ":", "Cross-Validation": "--"}
+        # Colores similares a los de tu imagen de referencia
+        colores_barras = ['#0065a3', '#6a0dad', '#006400'] # Azul, Morado, Verde
+        metodos = ["Resustitución", "Cross-Validation", "Leave-One-Out"]
+        distancias = ["Euclidiana", "Mahalanobis", "Probabilidad"]
         
-        x_pos = np.arange(len(nombres_clases))
+        x_pos = np.arange(len(metodos))
         
-        for dist in ["Euclidiana", "Mahalanobis", "Probabilidad"]:
-            for i, met in enumerate(["Resustitución", "Leave-One-Out", "Cross-Validation"]):
-                y_vals = historial[dist][met]['clases']
-                nombre_mostrar = historial[dist][met]['nombre_mostrar']
-                etiqueta = f"{nombre_mostrar} ({dist})"
-                ax.plot(x_pos, y_vals, label=etiqueta, color=colores[dist][i], linestyle=estilos[met], marker='o')
+        for idx, dist in enumerate(distancias):
+            ax = fig.add_subplot(3, 1, idx + 1)
+            
+            valores = []
+            nombres_x = []
+            
+            # Recopilar el porcentaje global de cada método para esta distancia
+            for met in metodos:
+                valores.append(historial[dist][met]['global'])
+                nombres_x.append(historial[dist][met]['nombre_mostrar'])
+            
+            # Crear la gráfica de barras
+            barras = ax.bar(x_pos, valores, color=colores_barras, width=0.5, edgecolor='black')
+            
+            # Formato de cada subplot
+            ax.set_xticks(x_pos)
+            ax.set_xticklabels(nombres_x, fontweight='bold')
+            ax.set_ylim(0, 115) # Margen extra arriba para que quepa el texto
+            ax.set_ylabel("Eficiencia Global (Accuracy %)")
+            ax.set_title(f"Comparativa de Métodos de Validación\nDistancia: {dist}", fontweight='bold')
+            ax.grid(True, linestyle='--', alpha=0.6, axis='y') # Solo cuadricula horizontal
+            
+            # Poner el texto del porcentaje exacto arriba de cada barra
+            for barra in barras:
+                altura = barra.get_height()
+                ax.text(barra.get_x() + barra.get_width()/2, altura + 2, 
+                        f"{altura:.2f}%", ha='center', fontweight='bold', fontsize=10)
         
-        ax.set_xticks(x_pos)
-        ax.set_xticklabels(nombres_clases)
-        ax.set_ylim(0, 105)
-        ax.set_ylabel("Eficiencia (%)")
-        ax.set_title("Comportamiento de los Métodos por Clase")
-        ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize='small')
-        ax.grid(True, linestyle='--', alpha=0.6)
-        fig.subplots_adjust(right=0.7) 
+        fig.tight_layout() # Ajusta el espacio para que no se encimen
         
         panel_grafica.addWidget(canv)
-        layout.addLayout(panel_grafica, stretch=2)
+        layout.addLayout(panel_grafica, stretch=3)
         
+        # Panel derecho: Rankings Globales
         panel_ranking = QVBoxLayout()
-        panel_ranking.addWidget(QLabel("<b>RANKINGS DE RENDIMIENTO GLOBAL</b>"))
+        lbl_ranking = QLabel("<b>RANKINGS DE RENDIMIENTO GLOBAL</b>")
+        lbl_ranking.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        panel_ranking.addWidget(lbl_ranking)
         
-        for dist in ["Euclidiana", "Mahalanobis", "Probabilidad"]:
+        for dist in distancias:
             datos_dist = []
-            for met in ["Resustitución", "Leave-One-Out", "Cross-Validation"]:
+            for met in metodos:
                 datos_dist.append((historial[dist][met]['nombre_mostrar'], historial[dist][met]['global']))
                 
+            # Ordenar de mayor a menor para sacar el 1er, 2do y 3er lugar
             datos_dist.sort(key=lambda x: x[1], reverse=True)
             
             txt = QTextEdit()
@@ -170,7 +186,8 @@ class DialogoGraficaFinal(QDialog):
             contenido += f"2do: {datos_dist[1][0]} ({datos_dist[1][1]:.2f}%)\n"
             contenido += f"3er: {datos_dist[2][0]} ({datos_dist[2][1]:.2f}%)\n"
             txt.setText(contenido)
-            txt.setStyleSheet("background-color: white; border: 1px solid gray;")
+            txt.setStyleSheet("background-color: white; border: 1px solid #c0c4cc; border-radius: 5px; font-size: 14px;")
+            txt.setFixedHeight(100) 
             panel_ranking.addWidget(txt)
             
         layout.addLayout(panel_ranking, stretch=1)
